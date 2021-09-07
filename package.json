@@ -1,9 +1,18 @@
 {
   "name": "todo-node",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/app.ts",
   "private": true,
   "license": "MIT",
+  "author": {
+    "email": "r.yates@live.com",
+    "name": "Rafael Yates",
+    "url": "https://github.com/rafaelyates"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafaelyates/todo-node.git"
+  },
   "scripts": {
     "start": "nodemon --config nodemon.json src/app.ts"
   },
