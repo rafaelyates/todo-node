@@ -17,15 +17,15 @@ todoRoutes.post('/todo/create', (req, res) => {
   return res.status(200).json(newTodo);
 });
 
-todoRoutes.delete('/todo/remove', (req, res) => {
-  memoryDataBase.todoList = memoryDataBase.todoList.filter(({ id }) => id !== req.query.id);
+todoRoutes.delete('/todo/remove/:id', (req, res) => {
+  memoryDataBase.todoList = memoryDataBase.todoList.filter(({ id }) => id !== req.params.id);
 
   return res.status(204).send();
 });
 
-todoRoutes.put('/todo/update', (req, res) => {
+todoRoutes.put('/todo/update/:id', (req, res) => {
   memoryDataBase.todoList = memoryDataBase.todoList.map((todo) => {
-    return todo.id === req.body.id ? req.body : todo;
+    return todo.id === req.params.id ? { ...req.body, id: todo.id } : todo;
   });
 
   return res.status(204).send();
