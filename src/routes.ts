@@ -25,7 +25,7 @@ todoRoutes.delete('/todo/remove/:id', (req, res) => {
 
 todoRoutes.put('/todo/update/:id', (req, res) => {
   memoryDataBase.todoList = memoryDataBase.todoList.map((todo) => {
-    return todo.id === req.params.id ? { ...req.body, id: todo.id } : todo;
+    return todo.id === req.params.id ? { ...todo, ...req.body, id: todo.id } : todo;
   });
 
   return res.status(204).send();
