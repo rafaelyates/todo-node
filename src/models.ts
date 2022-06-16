@@ -3,7 +3,3 @@ export type Todo = {
   message: string;
   done: boolean;
 };
-
-export type MemoryDatabase = {
-  todoList: Todo[];
-};

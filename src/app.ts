@@ -5,7 +5,7 @@ import cors from 'cors';
 import express from 'express';
 import http from 'http';
 
-import routes from './routes';
+import routes from '@todo-node/routes';
 
 dotenv.config();
 
