@@ -93,3 +93,6 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+# DotEnv file
+.env*
