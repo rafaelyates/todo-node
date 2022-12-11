@@ -1,16 +1,17 @@
 import { v4 as uuid } from 'uuid';
-import type { Request, Response } from 'express';
 
 import { memoryDataBase } from '@todo-node/db';
+
+import type { Request, Response } from 'express';
 import type { Todo } from '@todo-node/models';
 
-export const getListOfTodos = (req: Request, res: Response): void => {
-  const listOfTodos = Array.from(memoryDataBase.todoMap.values());
+export function getListOfTodos(req: Request, res: Response): void {
+  const listOfTodos = Array.from(memoryDataBase.values());
   res.status(200).json(listOfTodos);
-};
+}
 
-export const getOneTodo = (req: Request, res: Response): void => {
-  const todo = memoryDataBase.todoMap.get(req.params.id);
+export function getOneTodo(req: Request, res: Response): void {
+  const todo = memoryDataBase.get(req.params.id);
 
   if (!todo) {
     res.status(204).send();
@@ -18,23 +19,23 @@ export const getOneTodo = (req: Request, res: Response): void => {
   }
 
   res.status(200).json(todo);
-};
+}
 
-export const createNewTodo = (req: Request, res: Response): void => {
+export function createNewTodo(req: Request, res: Response): void {
   const id = uuid();
   const todo: Todo = { ...req.body, id };
 
-  memoryDataBase.todoMap.set(id, todo);
+  memoryDataBase.set(id, todo);
   res.status(200).json(todo);
-};
+}
 
-export const removeOneTodo = (req: Request, res: Response): void => {
-  memoryDataBase.todoMap.delete(req.params.id);
+export function removeOneTodo(req: Request, res: Response): void {
+  memoryDataBase.delete(req.params.id);
   res.status(204).send();
-};
+}
 
-export const updateOneTodo = (req: Request, res: Response): void => {
-  const previous = memoryDataBase.todoMap.get(req.params.id);
+export function updateOneTodo(req: Request, res: Response): void {
+  const previous = memoryDataBase.get(req.params.id);
 
   if (!previous) {
     res.status(204).send();
@@ -42,6 +43,6 @@ export const updateOneTodo = (req: Request, res: Response): void => {
   }
 
   const updated: Todo = { ...previous, ...req.body, id: req.params.id };
-  memoryDataBase.todoMap.set(req.params.id, updated);
+  memoryDataBase.set(req.params.id, updated);
   res.status(200).json(updated);
-};
+}

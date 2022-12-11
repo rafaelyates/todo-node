@@ -1,7 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ES5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ESNext",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext",
+      "ESNext.AsyncIterable"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -9,18 +14,31 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "CommonJS",
+    "module": "ESNext",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+    "noEmit": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "baseUrl": "./",
     "outDir": "./dist",
     "paths": {
-      "@todo-node/*": ["src/*"]
+      "@todo-node/*": [
+        "src/*"
+      ]
     }
   },
-  "include": ["src"]
+  "ts-node": {
+    "esm": true,
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

@@ -96,3 +96,7 @@ buck-out/
 
 # DotEnv file
 .env*
+
+# terraform
+.terraform
+*.tfstate**

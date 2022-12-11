@@ -1,11 +1,11 @@
 import dotenv from 'dotenv';
-import bodyParser from 'body-parser';
 import compression from 'compression';
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
-import http from 'http';
 
 import routes from '@todo-node/routes';
+import { initAWS, initLocal } from '@todo-node/init';
 
 dotenv.config();
 
@@ -16,9 +16,6 @@ const app = express()
   .use(cors())
   .use('/api', routes);
 
-const port: string = process.env.PORT ?? '4500';
-const host: string = process.env.HOST ?? 'localhost';
+const isDevelopment = process.env.NODE_ENV === 'development';
 
-export default http.createServer(app).listen(parseInt(port, 10), host, () => {
-  console.log(`server running on -> http://${host}:${port}`);
-});
+export default isDevelopment ? initLocal(app) : initAWS(app);
