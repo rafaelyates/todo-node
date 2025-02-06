@@ -1,10 +1,9 @@
-import http from 'http';
-import serverlessExpress from '@vendia/serverless-express';
+import serverlessExpress from '@codegenie/serverless-express';
+import { type APIGatewayEvent, type APIGatewayProxyCallback, type Context } from 'aws-lambda';
+import { type Application } from 'express';
+import http from 'node:http';
 
-import type { Express } from 'express';
-import type { APIGatewayEvent, Context, APIGatewayProxyCallback } from 'aws-lambda';
-
-export function initLocal(app: Express) {
+export const local = (app: Application) => {
   const port: string = process.env.PORT ?? '4500';
   const host: string = process.env.HOST ?? 'localhost';
 
@@ -13,12 +12,12 @@ export function initLocal(app: Express) {
   return expressInstance.listen(parseInt(port, 10), host, () => {
     console.log(`server running on -> http://${host}:${port}`);
   });
-}
+};
 
-export function initAWS(app: Express) {
+export const aws = (app: Application) => {
   const serverlessExpressInstance = serverlessExpress({ app });
 
   return async (event: APIGatewayEvent, context: Context, callback: APIGatewayProxyCallback) => {
     return serverlessExpressInstance(event, context, callback);
   };
-}
+};

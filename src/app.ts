@@ -1,21 +1,38 @@
-import dotenv from 'dotenv';
-import compression from 'compression';
 import bodyParser from 'body-parser';
+import compression from 'compression';
 import cors from 'cors';
 import express from 'express';
+import helmet from 'helmet';
+import { Container } from 'inversify';
+import { InversifyExpressServer } from 'inversify-express-utils';
 
-import routes from '@todo-node/routes';
-import { initAWS, initLocal } from '@todo-node/init';
+import { docs } from '@todo-node/document';
+import { env } from '@todo-node/env';
+import * as modules from '@todo-node/modules';
 
-dotenv.config();
+const container = new Container({ autoBindInjectable: true });
+container.load(modules.databaseModule);
+container.load(modules.controllersModule);
 
-const app = express()
-  .use(bodyParser.urlencoded({ extended: false }))
-  .use(bodyParser.json({ strict: true }))
-  .use(compression())
-  .use(cors())
-  .use('/api', routes);
+const envCors = (): express.RequestHandler => {
+  if (env.__DEV__) {
+    return cors();
+  } else {
+    return (req, res, next) => next();
+  }
+};
 
-const isDevelopment = process.env.NODE_ENV === 'development';
+const server = new InversifyExpressServer(
+  container,
+  express.Router({ caseSensitive: false, mergeParams: false, strict: false }),
+  { rootPath: '/api' },
+  express()
+    .use(bodyParser.urlencoded({ extended: false }))
+    .use(bodyParser.json({ strict: true }))
+    .use(compression())
+    .use(helmet())
+    .use(docs({ docsPath: '/api-docs' }))
+    .use(envCors()),
+);
 
-export default isDevelopment ? initLocal(app) : initAWS(app);
+export const app = server.build();
